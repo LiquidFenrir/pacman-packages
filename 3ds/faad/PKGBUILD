@@ -1,0 +1,52 @@
+# Maintainer: Dave Murphy <davem@devkitpro.org>
+
+pkgname="3ds-faad2"
+pkgver=2.8.8
+pkgrel=1
+pkgdesc="FAAD2 is an open source MPEG-4 and MPEG-2 AAC decoder"
+arch=('any')
+url="http://www.audiocoding.com/faad2.html"
+license=(GPL2+ custom:FAAD2)
+makedepends=('3ds-pkg-config' 'devkitpro-pkgbuild-helpers')
+options=('!strip' '!libtool' 'staticlibs')
+source=(
+ "https://sourceforge.net/projects/faac/files/faad2-src/faad2-2.8.0/faad2-${pkgver}.tar.gz"
+ "libfaad2-${pkgver}.patch"
+)
+sha256sums=(
+'985c3fadb9789d2815e50f4ff714511c79c2710ac27a4aaaf5c0c2662141426d'
+'CD6851C363C1B49C3F7ED496487D60F457DD852603FD4D619F4969DC0F758CF0'
+)
+
+
+build() {
+
+  source /opt/devkitpro/devkitarm.sh
+  source /opt/devkitpro/3dsvars.sh
+
+  cd faad2-${pkgver}
+  
+  patch -Np1 -i "$srcdir"/libfaad2-${pkgver}.patch
+
+  ./configure \
+    --host=arm-none-eabi \
+    --target=arm-none-eabi \
+    --prefix=${PORTLIBS_PREFIX} \
+    --enable-static \
+    --disable-shared
+
+  make
+}
+
+package () {
+
+  source /opt/devkitpro/devkitarm.sh
+  source /opt/devkitpro/3dsvars.sh
+
+  cd faad2-${pkgver}
+
+  make DESTDIR="${pkgdir}" install
+
+  # Licenses
+  install -Dm644 COPYING "${pkgdir}${PORTLIBS_PREFIX}/licenses/${pkgname}/COPYING"
+}

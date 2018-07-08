@@ -1,0 +1,75 @@
+diff -Naur a/common/mp4ff/mp4ff.h b/common/mp4ff/mp4ff.h
+--- a/common/mp4ff/mp4ff.h
++++ b/common/mp4ff/mp4ff.h
+@@ -35,6 +35,10 @@
+ extern "C" {
+ #endif /* __cplusplus */
+ 
++#ifdef USE_TAGGING
++#undef USE_TAGGING
++#endif
++
+ #include <stdint.h>
+ 
+ /* file callback structure */
+@@ -48,7 +52,7 @@ typedef struct
+     uint32_t read_error;
+ } mp4ff_callback_t;
+ 
+-#ifdef USE_TAGGING
++// #ifdef USE_TAGGING
+ 
+ /* metadata tag structure */
+ typedef struct
+@@ -67,7 +71,7 @@ typedef struct
+ 
+ int32_t mp4ff_meta_update(mp4ff_callback_t *f,const mp4ff_metadata_t * data);
+ 
+-#endif
++// #endif
+ 
+ 
+ #ifndef MP4FF_INTERNAL_H
+@@ -164,20 +168,20 @@ int32_t mp4ff_get_sample_offset(const mp4ff_t *f, const int32_t track, const int
+ int32_t mp4ff_find_sample(const mp4ff_t *f, const int32_t track, const int64_t offset,int32_t * toskip);
+ int32_t mp4ff_find_sample_use_offsets(const mp4ff_t *f, const int32_t track, const int64_t offset,int32_t * toskip);
+ 
+-int32_t mp4ff_read_sample(mp4ff_t *f, const int track, const int sample,
+-                          unsigned char **audio_buffer,  unsigned int *bytes);
++// int32_t mp4ff_read_sample(mp4ff_t *f, const int track, const int sample,
++                          // unsigned char **audio_buffer,  unsigned int *bytes);
+ 
+ int32_t mp4ff_read_sample_v2(mp4ff_t *f, const int track, const int sample,unsigned char *buffer);//returns 0 on error, number of bytes read on success, use mp4ff_read_sample_getsize() to check buffer size needed
+ int32_t mp4ff_read_sample_getsize(mp4ff_t *f, const int track, const int sample);//returns 0 on error, buffer size needed for mp4ff_read_sample_v2() on success
+ 
+ 
+ 
+-int32_t mp4ff_get_decoder_config(const mp4ff_t *f, const int track,
+-                             unsigned char** ppBuf, unsigned int* pBufSize);
++// int32_t mp4ff_get_decoder_config(const mp4ff_t *f, const int track,
++                             // unsigned char** ppBuf, unsigned int* pBufSize);
+ int32_t mp4ff_get_track_type(const mp4ff_t *f, const int track);
+ int32_t mp4ff_total_tracks(const mp4ff_t *f);
+-int32_t mp4ff_num_samples(const mp4ff_t *f, const int track);
+-int32_t mp4ff_time_scale(const mp4ff_t *f, const int track);
++// int32_t mp4ff_num_samples(const mp4ff_t *f, const int track);
++// int32_t mp4ff_time_scale(const mp4ff_t *f, const int track);
+ 
+ uint32_t mp4ff_get_avg_bitrate(const mp4ff_t *f, const int32_t track);
+ uint32_t mp4ff_get_max_bitrate(const mp4ff_t *f, const int32_t track);
+@@ -189,6 +193,7 @@ uint32_t mp4ff_get_audio_type(const mp4ff_t * f,const int32_t track);
+ 
+ 
+ /* metadata */
++#ifdef USE_TAGGING
+ int mp4ff_meta_get_num_items(const mp4ff_t *f);
+ int mp4ff_meta_get_by_index(const mp4ff_t *f, unsigned int index,
+                             char **item, char **value);
+@@ -207,6 +212,7 @@ int mp4ff_meta_get_totaldiscs(const mp4ff_t *f, char **value);
+ int mp4ff_meta_get_compilation(const mp4ff_t *f, char **value);
+ int mp4ff_meta_get_tempo(const mp4ff_t *f, char **value);
+ int32_t mp4ff_meta_get_coverart(const mp4ff_t *f, char **value);
++#endif
+ 
+ #ifdef __cplusplus
+ }
