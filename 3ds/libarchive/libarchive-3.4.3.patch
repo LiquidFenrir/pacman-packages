@@ -1,0 +1,82 @@
+diff -Naur libarchive-3.4.3.orig/libarchive/archive_ppmd7.c libarchive-3.4.3/libarchive/archive_ppmd7.c
+--- libarchive-3.4.3.orig/libarchive/archive_ppmd7.c
++++ libarchive-3.4.3/libarchive/archive_ppmd7.c
+@@ -4,7 +4,7 @@
+ 
+ #include "archive_platform.h"
+ 
+-#include <memory.h>
++// #include <memory.h>
+ 
+ #include "archive_ppmd7_private.h"
+ 
+diff -Naur libarchive-3.4.3.orig/libarchive/archive_read_disk_posix.c libarchive-3.4.3/libarchive/archive_read_disk_posix.c
+--- libarchive-3.4.3.orig/libarchive/archive_read_disk_posix.c
++++ libarchive-3.4.3/libarchive/archive_read_disk_posix.c
+@@ -100,7 +100,7 @@
+ #include "archive_read_disk_private.h"
+ 
+ #ifndef HAVE_FCHDIR
+-#error fchdir function required.
++// #error fchdir function required.
+ #endif
+ #ifndef O_BINARY
+ #define O_BINARY	0
+diff -Naur libarchive-3.4.3.orig/libarchive/archive_random.c libarchive-3.4.3/libarchive/archive_random.c
+--- libarchive-3.4.3.orig/libarchive/archive_random.c
++++ libarchive-3.4.3/libarchive/archive_random.c
+@@ -29,7 +29,7 @@
+ #ifdef HAVE_STDLIB_H
+ #include <stdlib.h>
+ #endif
+-
++#define HAVE_ARC4RANDOM_BUF 
+ #if !defined(HAVE_ARC4RANDOM_BUF) && (!defined(_WIN32) || defined(__CYGWIN__))
+ 
+ #ifdef HAVE_FCNTL
+diff -Naur libarchive-3.4.3.orig/libarchive/archive_write_set_format_iso9660.c libarchive-3.4.3/libarchive/archive_write_set_format_iso9660.c
+--- libarchive-3.4.3.orig/libarchive/archive_write_set_format_iso9660.c
++++ libarchive-3.4.3/libarchive/archive_write_set_format_iso9660.c
+@@ -2178,7 +2178,7 @@
+ 	strncpy(system_id, "Windows", size-1);
+ 	system_id[size-1] = '\0';
+ #else
+-#error no way to get the system identifier on your platform.
++// #error no way to get the system identifier on your platform.
+ #endif
+ }
+ 
+@@ -2508,7 +2508,7 @@
+ #elif defined(__CYGWIN__) || defined(__MINGW32__) || defined(__BORLANDC__)
+ 	offset = _timezone;
+ #else
+-	offset = timezone;
++	offset = _timezone;
+ #endif
+ 	offset *= -1;
+ 	if (tm->tm_isdst)
+diff -Naur libarchive-3.4.3.orig/Makefile.am libarchive-3.4.3/Makefile.am
+--- libarchive-3.4.3.orig/Makefile.am
++++ libarchive-3.4.3/Makefile.am
+@@ -7,7 +7,7 @@
+ # What to build and install
+ #
+ lib_LTLIBRARIES=	libarchive.la
+-noinst_LTLIBRARIES=	libarchive_fe.la
++noinst_LTLIBRARIES=
+ bin_PROGRAMS=	$(bsdtar_programs) $(bsdcpio_programs) $(bsdcat_programs)
+ man_MANS= $(libarchive_man_MANS) $(bsdtar_man_MANS) $(bsdcpio_man_MANS) $(bsdcat_man_MANS)
+ BUILT_SOURCES= libarchive/test/list.h tar/test/list.h cpio/test/list.h cat/test/list.h
+diff -Naur libarchive-3.4.3.orig/Makefile.in libarchive-3.4.3/Makefile.in
+--- libarchive-3.4.3.orig/Makefile.in
++++ libarchive-3.4.3/Makefile.in
+@@ -1902,7 +1902,7 @@
+ # What to build and install
+ #
+ lib_LTLIBRARIES = libarchive.la
+-noinst_LTLIBRARIES = libarchive_fe.la
++noinst_LTLIBRARIES =
+ man_MANS = $(libarchive_man_MANS) $(bsdtar_man_MANS) $(bsdcpio_man_MANS) $(bsdcat_man_MANS)
+ BUILT_SOURCES = libarchive/test/list.h tar/test/list.h cpio/test/list.h cat/test/list.h
+ TESTS_ENVIRONMENT = $(libarchive_TESTS_ENVIRONMENT) $(bsdtar_TESTS_ENVIRONMENT) $(bsdcpio_TESTS_ENVIRONMENT) $(bsdcat_TESTS_ENVIRONMENT)
+-- 
